@@ -11,9 +11,7 @@
     "target": "esnext",
     // For nodejs:
     "lib": ["esnext"],
-    "typeRoots": [
-      "./node_modules/@types" 
-    ],
+    "types": ["node"],
     // and npm install -D @types/node
 
     // Other Outputs
