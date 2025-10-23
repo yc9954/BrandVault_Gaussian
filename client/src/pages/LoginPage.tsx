@@ -1,12 +1,9 @@
 
-import logo from './logo.svg'
-
 function LoginPage() {
   return (
     
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
             이거는 로그인 페이지임 ㅇㅇ
         </p>
