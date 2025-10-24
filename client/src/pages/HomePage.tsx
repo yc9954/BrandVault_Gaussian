@@ -1,22 +1,32 @@
 import logo from '../logo.svg'
-
+import ImageButton from '../components/ImageButton'
+import googlelogo from '../assets/images/google_logo.svg'
 function HomePage() {
   return (
-    
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <div>
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>Binu AI</p>
+        </div>
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          Quasar: Monetize <br/ >
+          Your Space
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <p>
+          The AdSense for Short-form Video
+        </p>
+        <div>
+          <button>Creator Login</button>
+          <button>Advertiser Login</button>
+        </div>
+        <hr />
+        <p>Or continue with</p>
+        <div>
+          <ImageButton onClick={() => {}} imageSrc={googlelogo} altText=''></ImageButton>
+          <ImageButton onClick={() => {}} imageSrc={googlelogo} altText=''></ImageButton>
+          <ImageButton onClick={() => {}} imageSrc={googlelogo} altText=''></ImageButton>
+        </div>
       </header>
     </div>
   );
