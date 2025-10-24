@@ -1,10 +1,9 @@
 import logo from '../logo.svg'
-import ImageButton from '../components/ImageButton'
+import ImageButton from '../components/Button/ImageButton'
 import googlelogo from '../assets/images/google_logo.svg'
 function HomePage() {
   return (
     <div className="App">
-      <header className="App-header">
         <div>
           <img src={logo} className="App-logo" alt="logo" />
           <p>Binu AI</p>
@@ -27,7 +26,6 @@ function HomePage() {
           <ImageButton onClick={() => {}} imageSrc={googlelogo} altText=''></ImageButton>
           <ImageButton onClick={() => {}} imageSrc={googlelogo} altText=''></ImageButton>
         </div>
-      </header>
     </div>
   );
 }
