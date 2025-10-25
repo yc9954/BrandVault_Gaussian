@@ -1,15 +1,40 @@
 import './CreatorHeader.css'
+import type { ContentName } from '../../types';
 
-function CreatorHeader() {
+interface CreatorHeaderProps {
+    onSelect: (contentName: ContentName) => void
+}
+
+function CreatorHeader({onSelect}: CreatorHeaderProps) {
     return (
     <header className='side-bar'>
         <nav>
             <ol className='header-nav-list'>
-                <li> Product Library </li>
-                <li> My Projects </li>
-                <li> Dashboard </li>
-                <li> Earnings </li>
-                <li> Settings </li>
+                <li>
+            <button onClick={() => onSelect('product')}>
+              Product Library
+            </button>
+          </li>
+          <li>
+            <button onClick={() => onSelect('projects')}>
+              My Projects
+            </button>
+          </li>
+          <li>
+            <button onClick={() => onSelect('dashboard')}>
+              Dashboard
+            </button>
+          </li>
+          <li>
+            <button onClick={() => onSelect('earnings')}>
+              Earnings
+            </button>
+          </li>
+          <li>
+            <button onClick={() => onSelect('settings')}>
+              Settings
+            </button>
+          </li>
             </ol>
         </nav>
     </header>

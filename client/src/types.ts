@@ -1,0 +1,1 @@
+export type ContentName = 'product' | 'projects' | 'dashboard' | 'earnings' | 'settings';
