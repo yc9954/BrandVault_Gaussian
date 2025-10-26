@@ -1,7 +1,11 @@
 import logo from '../logo.svg'
 import ImageButton from '../components/Button/ImageButton'
 import googlelogo from '../assets/images/google_logo.svg'
+import { useCreatorNavigation } from '../hooks/useCreatorNavigation';
+
 function HomePage() {
+  const {goToCreator, goToDashboard} = useCreatorNavigation();
+
   return (
     <div className="App">
         <div>
@@ -16,7 +20,7 @@ function HomePage() {
           The AdSense for Short-form Video
         </p>
         <div>
-          <button>Creator Login</button>
+          <button onClick={goToCreator}>Creator Login</button>
           <button>Advertiser Login</button>
         </div>
         <hr />
