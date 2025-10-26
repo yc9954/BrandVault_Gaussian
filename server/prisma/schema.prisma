@@ -5,8 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -77,7 +76,7 @@ model Subscription_Plan {
   plan_id       Int            @id @default(autoincrement())
   plan_name     String
   price         Float
-  billing_cyle  String
+  billing_cycle  String
   asset_Limit   Int
   subscriptions Subscription[]
 }
@@ -86,7 +85,7 @@ model Subscription {
   subscription_id Int               @id @default(autoincrement())
   plan_id         Int
   brand_id        Int
-  start_dare      DateTime
+  start_date      DateTime
   end_date        DateTime
   plan            Subscription_Plan @relation(fields: [plan_id], references: [plan_id])
   brand           Brand             @relation(fields: [brand_id], references: [brand_id])
@@ -129,7 +128,7 @@ model Master_Asset_version {
   master_asset_id         Int
   version_number          String
   file_path               String
-  created_ar              DateTime        @default(now())
+  created_at              DateTime        @default(now())
   asset_type              String
   master_asset            Master_Asset    @relation(fields: [master_asset_id], references: [master_asset_id])
   product_assets          Product_Asset[]
@@ -164,7 +163,7 @@ model Product {
   brand_id       Int
   product_name   String
   category       String
-  calor          String
+  color          String?
   size           String
   brand          Brand              @relation(fields: [brand_id], references: [brand_id])
   product_assets Product_Asset[]
@@ -185,7 +184,7 @@ model Product_Asset {
 
 model Content_Partner {
   partner_id       Int              @id @default(autoincrement())
-  partner_bame     String
+  partner_name     String
   partner_type     String
   is_authenticated Boolean
   status           String
@@ -220,7 +219,7 @@ model AD_Contract {
   brand_id      Int
   partner_id    Int
   product_id    Int
-  contact_aroun String
+  contact_amount String
   contract_at   DateTime        @default(now())
   brand         Brand           @relation(fields: [brand_id], references: [brand_id])
   partner       Content_Partner @relation(fields: [partner_id], references: [partner_id])
