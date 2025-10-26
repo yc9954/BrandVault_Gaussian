@@ -1,0 +1,269 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  admin_id   Int                @id @default(autoincrement())
+  admin_name String
+  role       String
+  department String
+  requests   Asset_Request[]
+  reports    Analytics_Report[]
+}
+
+model Analytics_Report {
+  report_id        Int               @id @default(autoincrement())
+  created_by       Int
+  report_name      String
+  summary          String?
+  file_path        String
+  price            Float
+  created_at       DateTime          @default(now())
+  creator          Admin             @relation(fields: [created_by], references: [admin_id])
+  report_purchases Report_purchase[]
+}
+
+model Report_purchase {
+  purchase_id    Int              @id @default(autoincrement())
+  brand_id       Int
+  report_id      Int
+  user_id        Int
+  purchase_price Float
+  purchase_at    DateTime         @default(now())
+  brand          Brand            @relation(fields: [brand_id], references: [brand_id])
+  report         Analytics_Report @relation(fields: [report_id], references: [report_id])
+  user           Platform_User    @relation(fields: [user_id], references: [user_id])
+}
+
+model Brand {
+  brand_id         Int                    @id @default(autoincrement())
+  brand_name       String
+  contract_email   String                 @unique
+  industry         String?
+  status           String
+  platform_users   Platform_User[]
+  subscriptions    Subscription[]
+  products         Product[]
+  library_accesses Brand_Library_Access[]
+  asset_requests   Asset_Request[]
+  report_purchases Report_purchase[]
+  inquiries        Inquiry[]
+  ad_contracts     AD_Contract[]
+}
+
+model Platform_User {
+  user_id              Int               @id @default(autoincrement())
+  brand_id             Int
+  password             String
+  user_name            String
+  user_authority_level String
+  brand                Brand             @relation(fields: [brand_id], references: [brand_id])
+  report_purchases     Report_purchase[]
+}
+
+model Subscription_Plan {
+  plan_id       Int            @id @default(autoincrement())
+  plan_name     String
+  price         Float
+  billing_cyle  String
+  asset_Limit   Int
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  subscription_id Int               @id @default(autoincrement())
+  plan_id         Int
+  brand_id        Int
+  start_dare      DateTime
+  end_date        DateTime
+  plan            Subscription_Plan @relation(fields: [plan_id], references: [plan_id])
+  brand           Brand             @relation(fields: [brand_id], references: [brand_id])
+}
+
+model BrandVault_Library {
+  library_id    Int                    @id @default(autoincrement())
+  library_name  String
+  library_type  String
+  total_assets  Int
+  access_grants Brand_Library_Access[]
+  master_assets Master_Asset[]
+}
+
+model Brand_Library_Access {
+  access_id    Int                @id @default(autoincrement())
+  brand_id     Int
+  library_id   Int
+  access_level String
+  brand        Brand              @relation(fields: [brand_id], references: [brand_id])
+  library      BrandVault_Library @relation(fields: [library_id], references: [library_id])
+}
+
+model Master_Asset {
+  master_asset_id Int                    @id @default(autoincrement())
+  library_id      Int
+  asset_name      String
+  asset_code      String
+  file_path       String
+  access_level    String
+  library         BrandVault_Library     @relation(fields: [library_id], references: [library_id])
+  versions        Master_Asset_version[]
+  history         Master_Asset_History[]
+  usage_logs      Data_Usage_Log[]
+  asset_requests  Asset_Request[]
+}
+
+model Master_Asset_version {
+  master_asset_version_id Int             @id @default(autoincrement())
+  master_asset_id         Int
+  version_number          String
+  file_path               String
+  created_ar              DateTime        @default(now())
+  asset_type              String
+  master_asset            Master_Asset    @relation(fields: [master_asset_id], references: [master_asset_id])
+  product_assets          Product_Asset[]
+}
+
+model Master_Asset_History {
+  history_id         Int          @id @default(autoincrement())
+  master_asset_id    Int
+  version_major      String
+  version_minor      String
+  change_description String
+  changed_by         String
+  changed_at         DateTime     @default(now())
+  master_asset       Master_Asset @relation(fields: [master_asset_id], references: [master_asset_id])
+}
+
+model Asset_Request {
+  request_id      Int          @id @default(autoincrement())
+  brand_id        Int
+  master_asset_id Int
+  admin_id        Int
+  request_type    String
+  status          String
+  request_date    DateTime     @default(now())
+  brand           Brand        @relation(fields: [brand_id], references: [brand_id])
+  master_asset    Master_Asset @relation(fields: [master_asset_id], references: [master_asset_id])
+  admin           Admin        @relation(fields: [admin_id], references: [admin_id])
+}
+
+model Product {
+  product_id     Int                @id @default(autoincrement())
+  brand_id       Int
+  product_name   String
+  category       String
+  calor          String
+  size           String
+  brand          Brand              @relation(fields: [brand_id], references: [brand_id])
+  product_assets Product_Asset[]
+  inquiries      Inquiry[]
+  ad_contracts   AD_Contract[]
+  purchased_by   Product_Purchase[]
+  projects       Project[]          @relation("ProjectProducts")
+}
+
+model Product_Asset {
+  product_id              Int
+  master_asset_version_id Int
+  product                 Product              @relation(fields: [product_id], references: [product_id])
+  master_asset_version    Master_Asset_version @relation(fields: [master_asset_version_id], references: [master_asset_version_id])
+
+  @@id([product_id, master_asset_version_id])
+}
+
+model Content_Partner {
+  partner_id       Int              @id @default(autoincrement())
+  partner_bame     String
+  partner_type     String
+  is_authenticated Boolean
+  status           String
+  inquiries        Inquiry[]
+  ad_contracts     AD_Contract[]
+  data_usage_logs  Data_Usage_Log[]
+}
+
+model Message {
+  message_id      Int      @id @default(autoincrement())
+  sender_id       Int
+  receiver_id     Int
+  sender_type     String
+  receiver_type   String
+  message_content String
+  sent_at         DateTime @default(now())
+}
+
+model Inquiry {
+  inquiry_id   Int             @id @default(autoincrement())
+  partner_id   Int
+  brand_id     Int
+  product_id   Int
+  inquiry_type String
+  partner      Content_Partner @relation(fields: [partner_id], references: [partner_id])
+  brand        Brand           @relation(fields: [brand_id], references: [brand_id])
+  product      Product         @relation(fields: [product_id], references: [product_id])
+}
+
+model AD_Contract {
+  contract_id   Int             @id @default(autoincrement())
+  brand_id      Int
+  partner_id    Int
+  product_id    Int
+  contact_aroun String
+  contract_at   DateTime        @default(now())
+  brand         Brand           @relation(fields: [brand_id], references: [brand_id])
+  partner       Content_Partner @relation(fields: [partner_id], references: [partner_id])
+  product       Product         @relation(fields: [product_id], references: [product_id])
+}
+
+model Data_Usage_Log {
+  log_id          Int             @id @default(autoincrement())
+  master_asset_id Int
+  partner_id      Int
+  usage_purpose   String
+  usage_start_end String
+  master_asset    Master_Asset    @relation(fields: [master_asset_id], references: [master_asset_id])
+  partner         Content_Partner @relation(fields: [partner_id], references: [partner_id])
+}
+
+model Creator {
+  creator_id         Int                @id @default(autoincrement())
+  email              String             @unique
+  password           String
+  user_name          String
+  created_at         DateTime           @default(now())
+  purchased_products Product_Purchase[]
+  Project            Project[]
+}
+
+model Project {
+  project_id    Int       @id @default(autoincrement())
+  project_name  String
+  description   String?
+  created_at    DateTime  @default(now())
+  creator_id    Int
+  creator       Creator   @relation(fields: [creator_id], references: [creator_id])
+  products_used Product[] @relation("ProjectProducts")
+}
+
+model Product_Purchase {
+  purchase_id Int      @id @default(autoincrement())
+  purchase_at DateTime @default(now())
+  creator_id  Int
+  creator     Creator  @relation(fields: [creator_id], references: [creator_id])
+  product_id  Int
+  product     Product  @relation(fields: [product_id], references: [product_id])
+
+  @@unique([creator_id, product_id])
+}
