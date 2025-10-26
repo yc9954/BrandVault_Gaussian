@@ -12,7 +12,7 @@ PORT=3001 npm start
 ```bash
 cd server
 npm run dev
-
+```
 .env files are not uploaded on github.
 If you need them,
 contact: hbg1345@gmail.com
