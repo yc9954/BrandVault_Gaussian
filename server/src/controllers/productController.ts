@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
 import * as productService from '../services/productService.js'
-import { resolveTlsa } from 'node:dns';
 
 export const handleGetAllProducts = async (req: Request, res: Response) => {
     try {
