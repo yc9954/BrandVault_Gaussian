@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 interface JwtPayload {
     userId: number;
+    brandId: number;
 }
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
@@ -20,7 +21,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
             return res.status(403).json({ message: '토큰이 유효하지 않거나 만료되었습니다.' });
         }
         const jwtPayload = payload as JwtPayload;
-        req.userId = jwtPayload.userId; 
+        req.user = jwtPayload;
         next();
     });
 };
