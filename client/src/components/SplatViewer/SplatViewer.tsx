@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE from 'three';
+import { getApiBaseUrl } from '../../lib/api';
 import './SplatViewer.css';
 
 interface SplatViewerProps {
@@ -227,7 +228,7 @@ function SplatViewer({ jobId, onClose }: SplatViewerProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+    const apiUrl = getApiBaseUrl();
     
     // GLB, PLY, SPLAT 순서로 파일 존재 확인
     // 먼저 정적 파일 서빙 경로로 시도 (인증 불필요)

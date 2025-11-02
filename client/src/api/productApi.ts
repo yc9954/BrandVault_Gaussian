@@ -16,12 +16,15 @@ export interface Product {
 
 }
 
+import { getApiBaseUrl } from '../lib/api';
+
 /**
  * 모든 제품 목록을 서버에서 가져옵니다.
  * @returns Product 배열 Promise
  */
+
 export const fetchAllProducts = async (): Promise<Product[]> => {
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+  const API_URL = getApiBaseUrl();
   
   try {
     console.log('API 호출:', `${API_URL}/api/products`);
@@ -45,7 +48,7 @@ export const fetchAllProducts = async (): Promise<Product[]> => {
     console.error('Fetch error:', error);
     // 네트워크 오류나 CORS 오류의 경우 더 명확한 메시지
     if (error.name === 'TypeError' && error.message.includes('fetch')) {
-      throw new Error('백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인하세요. (http://localhost:3000)');
+      throw new Error(`백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인하세요. (${API_URL})`);
     }
     throw error;
   }

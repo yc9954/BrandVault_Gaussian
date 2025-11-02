@@ -1,11 +1,8 @@
-import axios from 'axios';
-
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+import { api, getApiBaseUrl } from '../lib/api';
 
 // 인증 토큰 가져오기 (쿠키에서)
 const getAuthHeaders = () => {
   return {
-    withCredentials: true,
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -32,8 +29,8 @@ export const uploadImagesAndConvert = async (files: File[]): Promise<UploadRespo
     formData.append('images', file);
   });
 
-  const response = await axios.post<UploadResponse>(
-    `${API_BASE_URL}/api/splat/convert`,
+  const response = await api.post<UploadResponse>(
+    '/api/splat/convert',
     formData,
     getAuthHeaders()
   );
@@ -45,12 +42,7 @@ export const uploadImagesAndConvert = async (files: File[]): Promise<UploadRespo
  * 작업 상태 확인
  */
 export const getJobStatus = async (jobId: string): Promise<JobStatus> => {
-  const response = await axios.get<JobStatus>(
-    `${API_BASE_URL}/api/splat/status/${jobId}`,
-    {
-      withCredentials: true,
-    }
-  );
+  const response = await api.get<JobStatus>(`/api/splat/status/${jobId}`);
 
   return response.data;
 };
@@ -59,6 +51,6 @@ export const getJobStatus = async (jobId: string): Promise<JobStatus> => {
  * .splat 파일 다운로드 URL 생성
  */
 export const getSplatDownloadUrl = (jobId: string): string => {
-  return `${API_BASE_URL}/api/splat/stream/${jobId}`;
+  return `${getApiBaseUrl()}/api/splat/stream/${jobId}`;
 };
 
