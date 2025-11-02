@@ -17,6 +17,9 @@ const port = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// 프록시 뒤(HTTPS)에서 쿠키를 쓰면 필요 (Railway, Vercel 등)
+app.set('trust proxy', 1);
+
 // CORS 설정: Vercel 도메인과 로컬 개발 환경 모두 허용
 const allowedOrigins = [
   process.env.CLIENT_URL || 'http://localhost:3001',

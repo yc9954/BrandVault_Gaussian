@@ -1,3 +1,5 @@
+import { getApiBaseUrl } from '../lib/api';
+
 // 1. (필수) 데이터 타입을 정의합니다.
 // 이 타입은 컴포넌트에서도 재사용할 수 있도록 export 합니다.
 
@@ -15,8 +17,6 @@ export interface Product {
   };
 
 }
-
-import { getApiBaseUrl } from '../lib/api';
 
 /**
  * 모든 제품 목록을 서버에서 가져옵니다.
